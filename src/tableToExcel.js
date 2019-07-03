@@ -10,8 +10,8 @@ const TableToExcel = (function(Parser) {
     return wb;
   };
 
-  methods.initSheet = function(wb, sheetName) {
-    let ws = wb.addWorksheet(sheetName);
+  methods.initSheet = function(wb, sheetName,pageSetup) {
+    let ws = wb.addWorksheet(sheetName,{pageSetup});
     return ws;
   };
 
@@ -25,7 +25,8 @@ const TableToExcel = (function(Parser) {
   };
 
   methods.tableToSheet = function(wb, table, opts) {
-    let ws = this.initSheet(wb, opts.sheet.name);
+    console.log("HEHE");
+    let ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup);
     ws = Parser.parseDomToTable(ws, table, opts);
     return wb;
   };
@@ -35,13 +36,17 @@ const TableToExcel = (function(Parser) {
     wb = this.tableToSheet(wb, table, opts);
     return wb;
   };
-
+  
   methods.convert = function(table, opts = {}) {
     let defaultOpts = {
       name: "export.xlsx",
       autoStyle: false,
       sheet: {
         name: "Sheet 1"
+      },
+      pageSetup: {
+        orientation: 'portrait',
+        pageSize: 9
       }
     };
     opts = { ...defaultOpts, ...opts };
