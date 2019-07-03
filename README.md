@@ -186,3 +186,9 @@ Example:
 ## 1.0.3
 
 - Option to specify row height
+
+## 1.0.4
+
+- Option to add pageSetup (based on Exceljs)
+- Not written in Exceljs but A3 paperSize value = 8
+
