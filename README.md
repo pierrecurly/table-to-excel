@@ -269,7 +269,7 @@ worksheet.pageSetup.printTitlesColumn = 'A:C';
 - Option to add pageSetup (based on Exceljs)
 - Not written in Exceljs but A3 paperSize value = 8
 
-## 1.0.5 (In Progress)
+## 1.0.5 
 
 - Option to add more sheets 
 - 
