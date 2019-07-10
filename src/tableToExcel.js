@@ -10,8 +10,8 @@ const TableToExcel = (function(Parser) {
     return wb;
   };
 
-  methods.initSheet = function(wb, sheetName,pageSetup) {
-    let ws = wb.addWorksheet(sheetName,{pageSetup});
+  methods.initSheet = function(wb, sheetName,pageSetup,properties) {
+    let ws = wb.addWorksheet(sheetName,{pageSetup,properties});
     return ws;
   };
 
@@ -26,8 +26,11 @@ const TableToExcel = (function(Parser) {
 
   methods.tableToSheet = function(wb, table, opts) {
     console.log("HEHE");
-    let ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup);
-    ws = Parser.parseDomToTable(ws, table, opts);
+    let ws;
+    for(let x= 0; x <opts.length; x++){
+        ws = this.initSheet(wb, opts[x].sheet.name,opts[x].pageSetup,opts[x].properties);
+        ws = Parser.parseDomToTable(ws, table, opts[x]);
+    }
     return wb;
   };
 
@@ -37,8 +40,8 @@ const TableToExcel = (function(Parser) {
     return wb;
   };
   
-  methods.convert = function(table, opts = {}) {
-    let defaultOpts = {
+  methods.convert = function(table, opts = []) {
+    let defaultOpts = [{
       name: "export.xlsx",
       autoStyle: false,
       sheet: {
@@ -47,8 +50,25 @@ const TableToExcel = (function(Parser) {
       pageSetup: {
         orientation: 'portrait',
         pageSize: 9
+      },
+      properties: {
+        showGridLines: true
       }
-    };
+    }, 
+    {
+      name: "export.xlsx",
+      autoStyle: false,
+      sheet: {
+        name: "Sheet 2"
+      },
+      pageSetup: {
+        orientation: 'portrait',
+        pageSize: 9
+      },
+      properties: {
+        showGridLines: true
+      }
+    }];
     opts = { ...defaultOpts, ...opts };
     let wb = this.tableToBook(table, opts);
     this.save(wb, opts.name);
