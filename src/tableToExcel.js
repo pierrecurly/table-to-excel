@@ -59,7 +59,7 @@ const TableToExcel = (function(Parser) {
   };
 
   methods.manyTablesToSheet = function(wb, table, opts) {
-    console.log("HEHE");
+    console.log("manyTablesToSheet");
     let ws;
     for(let x= 0; x <table.length; x++){
         ws = this.initSheet(wb, opts[x].sheet.name,opts[x].pageSetup,opts[x].properties);
