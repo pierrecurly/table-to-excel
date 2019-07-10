@@ -27,10 +27,8 @@ const TableToExcel = (function(Parser) {
   methods.tableToSheet = function(wb, table, opts) {
     console.log("HEHE");
     let ws;
-    for(let x= 0; x <opts.length; x++){
-        ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup,opts.properties);
-        ws = Parser.parseDomToTable(ws, table, opts[x]);
-    }
+    ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup,opts.properties);
+    ws = Parser.parseDomToTable(ws, table, opts[x]);
     return wb;
   };
 
@@ -63,7 +61,7 @@ const TableToExcel = (function(Parser) {
   methods.manyTablesToSheet = function(wb, table, opts) {
     console.log("HEHE");
     let ws;
-    for(let x= 0; x <opts.length; x++){
+    for(let x= 0; x <table.length; x++){
         ws = this.initSheet(wb, opts[x].sheet.name,opts[x].pageSetup,opts[x].properties);
         ws = Parser.parseDomToTable(ws, table[x], opts[x]);
     }
@@ -71,7 +69,7 @@ const TableToExcel = (function(Parser) {
   };
   methods.manyTablesToBook = function(table, opts) {
     let wb = this.initWorkBook();
-    wb = this.manyTablesToSheet(wb, table, opts);
+     wb = this.manyTablesToSheet(wb, table, opts);
     return wb;
   };
   methods.convertMany = function(table, opts = []) {
@@ -102,10 +100,8 @@ const TableToExcel = (function(Parser) {
         showGridLines: true
       }
     }];
-    for (let x =0; x< table.length; x++){
-      opts = { ...defaultOpts[x], ...opts[x] };
-      let wb = this.manyTablesToBook(table[x], opts);
-    }
+
+    let wb = this.manyTablesToBook(table, opts?opts :defaultOpts);
     this.save(wb, opts[0].name);
   };
 
