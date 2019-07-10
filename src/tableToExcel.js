@@ -28,7 +28,7 @@ const TableToExcel = (function(Parser) {
     console.log("HEHE");
     let ws;
     for(let x= 0; x <opts.length; x++){
-        ws = this.initSheet(wb, opts[x].sheet.name,opts[x].pageSetup,opts[x].properties);
+        ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup,opts.properties);
         ws = Parser.parseDomToTable(ws, table, opts[x]);
     }
     return wb;
@@ -40,7 +40,41 @@ const TableToExcel = (function(Parser) {
     return wb;
   };
   
-  methods.convert = function(table, opts = []) {
+  methods.convert = function(table, opts = {}) {
+    let defaultOpts = {
+      name: "export.xlsx",
+      autoStyle: false,
+      sheet: {
+        name: "Sheet 1"
+      },
+      pageSetup: {
+        orientation: 'portrait',
+        pageSize: 9
+      },
+      properties: {
+        showGridLines: true
+      }
+    };
+    opts = { ...defaultOpts, ...opts };
+    let wb = this.tableToBook(table, opts);
+    this.save(wb, opts.name);
+  };
+
+  methods.manyTablesToSheet = function(wb, table, opts) {
+    console.log("HEHE");
+    let ws;
+    for(let x= 0; x <opts.length; x++){
+        ws = this.initSheet(wb, opts[x].sheet.name,opts[x].pageSetup,opts[x].properties);
+        ws = Parser.parseDomToTable(ws, table[x], opts[x]);
+    }
+    return wb;
+  };
+  methods.manyTablesToBook = function(table, opts) {
+    let wb = this.initWorkBook();
+    wb = this.manyTablesToSheet(wb, table, opts);
+    return wb;
+  };
+  methods.convertMany = function(table, opts = []) {
     let defaultOpts = [{
       name: "export.xlsx",
       autoStyle: false,
@@ -69,7 +103,9 @@ const TableToExcel = (function(Parser) {
       }
     }];
     opts = { ...defaultOpts, ...opts };
-    let wb = this.tableToBook(table, opts);
+    for (let x =0; x< table.length; x++){
+      let wb = this.manyTablesToBook(table[x], opts[x]);
+    }
     this.save(wb, opts.name);
   };
 
