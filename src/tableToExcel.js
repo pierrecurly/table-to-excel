@@ -104,9 +104,9 @@ const TableToExcel = (function(Parser) {
     }];
     for (let x =0; x< table.length; x++){
       opts = { ...defaultOpts[x], ...opts[x] };
-      let wb = this.manyTablesToBook(table[x], opts[x]);
+      let wb = this.manyTablesToBook(table[x], opts);
     }
-    this.save(wb, opts.name);
+    this.save(wb, opts[0].name);
   };
 
   return methods;
