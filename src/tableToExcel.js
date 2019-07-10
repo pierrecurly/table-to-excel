@@ -56,7 +56,6 @@ const TableToExcel = (function(Parser) {
       }
     }, 
     {
-      name: "export.xlsx",
       autoStyle: false,
       sheet: {
         name: "Sheet 2"
