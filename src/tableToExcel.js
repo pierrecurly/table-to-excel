@@ -11,7 +11,7 @@ const TableToExcel = (function(Parser) {
   };
 
   methods.initSheet = function(wb, sheetName,pageSetup,properties) {
-    let ws = wb.addWorksheet(sheetName,{pageSetup,properties});
+    let ws = wb.addWorksheet(sheetName,{pageSetup,properties,state:'visible'});
     return ws;
   };
 
