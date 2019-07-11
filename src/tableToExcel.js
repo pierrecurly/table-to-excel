@@ -10,11 +10,11 @@ const TableToExcel = (function(Parser) {
     return wb;
   };
 
-  methods.initSheet = function(wb, sheetName,pageSetup,properties) {
-    // let ws = wb.addWorksheet(sheetName,{pageSetup,properties,state:'visible'});
-    let ws =wb.addWorksheet('test',{properties:{tabColor:{argb:'FF00FF00'}},views:[
-      {state: 'frozen', ySplit: 5, activeCell: 'A1', showGridLines:false}
-      ]})
+  methods.initSheet = function(wb, sheetName,pageSetup,properties,views) {
+    let ws = wb.addWorksheet(sheetName,{pageSetup,properties,state:'visible',views});
+    // let ws =wb.addWorksheet('test',{properties:{tabColor:{argb:'FF00FF00'}},views:[
+    //   {state: 'frozen', ySplit: 5, activeCell: 'A1', showGridLines:false}
+    //   ]})
     return ws;
   };
 
@@ -30,7 +30,7 @@ const TableToExcel = (function(Parser) {
   methods.tableToSheet = function(wb, table, opts) {
     console.log("HEHE");
     let ws;
-    ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup,opts.properties);
+    ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup,opts.properties,opts.views);
     ws = Parser.parseDomToTable(ws, table, opts);
     return wb;
   };
@@ -65,7 +65,7 @@ const TableToExcel = (function(Parser) {
     console.log("manyTablesToSheet");
     let ws;
     for(let x= 0; x <table.length; x++){
-        ws = this.initSheet(wb, opts[x].sheet.name,opts[x].pageSetup,opts[x].properties);
+        ws = this.initSheet(wb, opts[x].sheet.name,opts[x].pageSetup,opts[x].properties,opts[x].views);
         ws = Parser.parseDomToTable(ws, table[x], opts[x]);
     }
     return wb;
