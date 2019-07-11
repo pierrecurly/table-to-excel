@@ -11,7 +11,10 @@ const TableToExcel = (function(Parser) {
   };
 
   methods.initSheet = function(wb, sheetName,pageSetup,properties) {
-    let ws = wb.addWorksheet(sheetName,{pageSetup,properties,state:'visible'});
+    // let ws = wb.addWorksheet(sheetName,{pageSetup,properties,state:'visible'});
+    let ws = wb.addWorksheet('test',{properties:{tabColor:{argb:'FF00FF00'}},views:[
+      {state: 'frozen', ySplit: 5, activeCell: 'A1', showGridLines:false}
+      ]})
     return ws;
   };
 
