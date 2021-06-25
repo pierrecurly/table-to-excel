@@ -41,14 +41,23 @@ const TTEParser = (function () {
         if (td.getAttribute("data-formula")) {
           const formula = td.getAttribute("data-formula");
           if (td.getAttribute("data-formula-v")) {
+            console.log('IF')
             const cell = td.getAttribute("data-cell");
+            console.log('cell', cell)
             const value = td.getAttribute("data-value");
+            console.log('value', value)
             const dataValue = parseFloat(row.getAttribute("data-formula-v"));
+            console.log('dataValue', dataValue)
             ws.getCell(cell).value = { formula: `${formula}*${dataValue})`, result: value };
           } else {
+            console.log('ELSE')
             const [start, end] = formula.split('-');
+            console.log('start', start)
+            console.log('end', end)
             const cell = td.getAttribute("data-cell");
+            console.log('cell', cell)
             const value = td.getAttribute("data-value");
+            console.log('value', value)
             ws.getCell(cell).value = { formula: `SUM(${start}+${end})`, result: value };
           }
         }
