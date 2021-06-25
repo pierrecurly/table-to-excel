@@ -28,7 +28,6 @@ const TableToExcel = (function(Parser) {
   };
 
   methods.tableToSheet = function(wb, table, opts) {
-    console.log("HEHE");
     let ws;
     ws = this.initSheet(wb, opts.sheet.name,opts.pageSetup,opts.properties,opts.views);
     ws = Parser.parseDomToTable(ws, table, opts);

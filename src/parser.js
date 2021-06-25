@@ -1,4 +1,4 @@
-const TTEParser = (function() {
+const TTEParser = (function () {
   let methods = {};
 
   /**
@@ -6,12 +6,12 @@ const TTEParser = (function() {
    * @param {object} ws The worksheet object
    * @param {HTML entity} table The table to be converted to excel sheet
    */
-  methods.parseDomToTable = function(ws, table, opts) {
+  methods.parseDomToTable = function (ws, table, opts) {
     let _r, _c, cs, rs, r, c;
     let rows = [...table.getElementsByTagName("tr")];
     let widths = table.getAttribute("data-cols-width");
     if (widths)
-      widths = widths.split(",").map(function(item) {
+      widths = widths.split(",").map(function (item) {
         return parseInt(item);
       });
     let merges = [];
@@ -37,6 +37,22 @@ const TTEParser = (function() {
           _c--;
           continue;
         }
+
+        if (td.getAttribute("data-formula")) {
+          const formula = td.getAttribute("data-formula");
+          if (td.getAttribute("data-formula-v")) {
+            const cell = td.getAttribute("data-cell");
+            const value = td.getAttribute("data-value");
+            const dataValue = parseFloat(row.getAttribute("data-formula-v"));
+            ws.getCell(cell).value = { formula: `${formula}*${dataValue})`, result: value };
+          } else {
+            const [start, end] = formula.split('-');
+            const cell = td.getAttribute("data-cell");
+            const value = td.getAttribute("data-value");
+            ws.getCell(cell).value = { formula: `SUM(${start}+${end})`, result: value };
+          }
+        }
+
         for (let _m = 0; _m < merges.length; ++_m) {
           var m = merges[_m];
           if (m.s.c == c && m.s.r <= r && r <= m.e.r) {
@@ -84,14 +100,14 @@ const TTEParser = (function() {
    * @param {object} ws The worksheet object
    * @param {object[]} merges array of merges
    */
-  let applyMerges = function(ws, merges) {
+  let applyMerges = function (ws, merges) {
     merges.forEach(m => {
       ws.mergeCells(
         getExcelColumnName(m.s.c) +
-          m.s.r +
-          ":" +
-          getExcelColumnName(m.e.c) +
-          m.e.r
+        m.s.r +
+        ":" +
+        getExcelColumnName(m.e.c) +
+        m.e.r
       );
     });
   };
@@ -99,7 +115,7 @@ const TTEParser = (function() {
   /**
    * Convert HTML to plain text
    */
-  let htmldecode = (function() {
+  let htmldecode = (function () {
     let entities = [
       ["nbsp", " "],
       ["middot", "·"],
@@ -108,7 +124,7 @@ const TTEParser = (function() {
       ["gt", ">"],
       ["lt", "<"],
       ["amp", "&"]
-    ].map(function(x) {
+    ].map(function (x) {
       return [new RegExp("&" + x[0] + ";", "g"), x[1]];
     });
     return function htmldecode(str) {
@@ -128,14 +144,14 @@ const TTEParser = (function() {
    * @param {number} num  The positive integer to convert to a column name.
    * @return {string}  The column name.
    */
-  let getExcelColumnName = function(num) {
+  let getExcelColumnName = function (num) {
     for (var ret = "", a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
       ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
     }
     return ret;
   };
 
-  let getColumnAddress = function(col, row) {
+  let getColumnAddress = function (col, row) {
     return getExcelColumnName(col) + row;
   };
 
@@ -143,7 +159,7 @@ const TTEParser = (function() {
    * Checks the data type specified and conerts the value to it.
    * @param {HTML entity} td
    */
-  let getValue = function(td) {
+  let getValue = function (td) {
     let dataType = td.getAttribute("data-t");
     let rawVal = htmldecode(td.innerHTML);
     if (dataType) {
@@ -171,8 +187,8 @@ const TTEParser = (function() {
             rawVal.toLowerCase() === "true"
               ? true
               : rawVal.toLowerCase() === "false"
-              ? false
-              : Boolean(parseInt(rawVal));
+                ? false
+                : Boolean(parseInt(rawVal));
           break;
         default:
           val = rawVal;
@@ -193,7 +209,7 @@ const TTEParser = (function() {
    * Prepares the style object for a cell using the data attributes
    * @param {HTML entity} td
    */
-  let getStylesDataAttr = function(td) {
+  let getStylesDataAttr = function (td) {
     //Font attrs
     let font = {};
     if (td.getAttribute("data-f-name"))
