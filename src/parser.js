@@ -50,7 +50,7 @@ const TTEParser = (function () {
             console.log('dataValue', dataValue)
             ws.getCell(cell).value = { formula: `${formula}*${dataValue})`, result: value };
           } else {
-            console.log('ELSE')
+            console.log('ELSE');
             const [start, end] = formula.split('-');
             console.log('start', start)
             console.log('end', end)
